@@ -1,0 +1,9 @@
+
+Input:
+  echo hello
+  quit
+
+Expected:
+  hello
+  (shell terminates)
+

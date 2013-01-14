@@ -1,0 +1,20 @@
+
+Input:
+  ./myspin 8 &
+  fg %1
+  ctrl-z
+  jobs
+  fg %1
+  ctrl-c
+
+Expected output:
+  tsh> ./myspin 8 &
+  [1] (6360) ./myspin 8 &
+  tsh> fg %1
+  [1] Stopped     ./myspin 8 &
+
+  tsh> jobs
+  [1] (6360) Stopped ./myspin 8 &
+  tsh> fg %1
+  Job [1] (6360) terminated by signal 2
+  tsh>

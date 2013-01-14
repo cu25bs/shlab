@@ -1,0 +1,26 @@
+
+Input:
+  ./mspin 8
+  ctrl-z
+  jobs
+  quit
+  jobs
+  fg %1
+  ctrl-c
+  quit
+
+Expected output:
+  tsh> myspin 8
+  [1] Stopped    myspin 8
+
+  tsh> jobs
+  [1] (18326) Stopped myspin 8
+  tsh> quit
+  There are stopped jobs
+  tsh> jobs
+  [1] (18326) Stopped myspin 8
+  tsh> fg %1
+  Job [1] (18326) terminated by signal 2
+  tsh> quit
+
+

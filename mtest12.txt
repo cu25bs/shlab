@@ -1,0 +1,26 @@
+
+Input:
+  ./mysplit 6
+  ctrl-z
+  jobs
+  ps -f
+  ctrl-\
+
+Expected output:
+  tsh> ./mysplit 6
+  [1] Stopped     ./mysplit 6
+
+  tsh> jobs
+  [1] (6479) Stopped ./mysplit 6
+  tsh> ps -f
+  UID        PID  PPID  C STIME TTY          TIME CMD
+  glancast  6441  5186  0 22:00 pts/2    00:00:00 -bash
+  glancast  6468  6441  0 22:00 pts/2    00:00:00 tsh
+  glancast  6479  6468  0 22:02 pts/2    00:00:00 ./mysplit 6
+  glancast  6480  6479  0 22:02 pts/2    00:00:00 ./mysplit 6
+  glancast  6481  6468  0 22:02 pts/2    00:00:00 ps -f
+  tsh> Terminating after receipt of SIGQUIT signal
+
+
+  (Note: There should be 2 mysplit CMDs: parent+child )
+

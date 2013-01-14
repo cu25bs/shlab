@@ -1,0 +1,6 @@
+
+Input:
+  ctrl-d
+
+Expected Effect:
+  (shell terminates)

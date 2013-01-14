@@ -1,0 +1,6 @@
+/**
+ * Start the shell ('tsh' or 'tshref'), if not already started.
+ * Then enter these Input commands:
+ *
+ */
+

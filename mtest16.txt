@@ -1,0 +1,28 @@
+
+Input:
+  ./mystop 2
+  (wait fo the process to stop itself)
+  jobs
+  ./myint 2
+  (wait for the process to interrupt itself)
+  jobs
+  fg %1
+  (process should terminate)
+  jobs
+  (shouldn't be any background jobs)
+  quit
+
+Expected output:
+  tsh> ./mystop 2
+  [1] Stopped     ./mystop 2
+
+  tsh> jobs
+  [1] (6863) Stopped ./mystop 2
+  tsh> ./myint 2
+  Job [2] (6864) terminated by signal 2
+  tsh> jobs
+  [1] (6863) Stopped ./mystop 2
+  tsh> fg %1
+  tsh> jobs
+  tsh> quit
+

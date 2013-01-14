@@ -1,0 +1,15 @@
+
+Input:
+  ./myspin 8 &
+  ./myspin 9
+  ctl-c
+  jobs
+
+Expected output:
+  tsh> ./myspin 8 &
+  [1] (6106) ./myspin 8 &
+  tsh> ./myspin 9
+  Job [2] (6107) terminated by signal 2
+  tsh> jobs
+  [1] (6106) Running ./myspin 8 &
+

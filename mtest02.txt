@@ -1,0 +1,7 @@
+
+Input:
+  quit
+
+Expected Effect:
+  (shell terminates)
+

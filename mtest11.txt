@@ -1,0 +1,17 @@
+
+Input:
+  ./mysplit 6
+  ctrl-c
+  ps -f
+
+Expected output:
+  tsh> ./mysplit 8
+  Job [1] (6405) terminated by signal 2
+  tsh> ps -f
+  UID        PID  PPID  C STIME TTY          TIME CMD
+  glancast  6375  5186  0 21:57 pts/2    00:00:00 -bash
+  glancast  6402  6375  0 21:57 pts/2    00:00:00 tsh
+  glancast  6407  6402  0 21:57 pts/2    00:00:00 ps -f
+
+  (Note: There should not be a mysplit CMD now)
+

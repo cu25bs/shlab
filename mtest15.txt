@@ -1,0 +1,38 @@
+
+Input:
+  ./myspin 30 &
+  ./myspin 32 &
+  jobs
+  fg %1
+  ctrl-z
+  jobs
+  bg %3
+  bg %1
+  jobs
+  (wait for background jobs to finish)
+  quit
+  
+Expected output:
+  tsh> ./myspin 30 &
+  [1] (6782) ./myspin 30 &
+  tsh> ./myspin 32 &
+  [2] (6785) ./myspin 32 &
+  tsh> jobs
+  [1] (6782) Running ./myspin 30 &
+  [2] (6785) Running ./myspin 32 &
+  tsh> fg %1
+  [1] Stopped     ./myspin 30 &
+
+  tsh> jobs
+  [1] (6782) Stopped ./myspin 30 &
+  [2] (6785) Running ./myspin 32 &
+  tsh> bg %3
+  %3: No such job
+  tsh> bg %1
+  [1] (6782) ./myspin 30 &
+  tsh> jobs
+  [1] (6782) Running ./myspin 30 &
+  [2] (6785) Running ./myspin 32 &
+
+  tsh> quit
+

@@ -1,0 +1,338 @@
+Shell Test Description
+----------------------
+
+Each test describes a sequence of inputs to your tiny shell, followed
+by expected output and/or effects. The reference shell can be run with
+the same input to reproduce the expected output. Your output should
+match the expected output except for differences in process ids. 
+
+For each test, you will need to start your shell and then enter the
+input commands for that test. 
+
+A more convient way to do this is to use the 'make' program. 
+To run any test just type make testNN where NN is the number of the
+test. (There are 16 tests: test01 to test16)
+
+Example: To get the instructions for test04, at the linux prompt type
+
+make test04
+
+
+Tests:
+-----
+
+1. test01
+Input:
+  ctrl-d
+
+Expected Effect:
+  (shell terminates)
+
+2. test02
+Input:
+  quit
+
+Expected Effect:
+  (shell terminates)
+
+3. test03
+Input:
+  echo hello
+  quit
+
+Expected:
+  hello
+  (shell terminates)
+
+4. test04
+Input:
+  ./myspin 2 &
+
+Expected output:
+  [1] (2135) myspin 2 &
+  tsh> 
+
+5. test05
+Input:
+  myspin 6 &
+  myspin 8 &
+  jobs
+
+Expected output:
+  tsh> myspin 6 &
+  [1] (5978) myspin 6 &
+  tsh> myspin 8 &
+  [2] (5981) myspin 8 &
+  tsh> jobs
+  [1] (5978) Running myspin 6 &
+  [2] (5981) Running myspin 8 &
+
+6. test06
+Input:
+  myspin 6
+  ctl-c
+
+Expected output:
+  tsh> myspin 6
+  Job [1] (6026) terminated by signal 2
+
+7. test07
+Input:
+  myspin 8 &
+  myspin 9
+  ctl-c
+  jobs
+
+Expected output:
+  tsh> myspin 8 &
+  [1] (6106) myspin 8 &
+  tsh> myspin 9
+  Job [2] (6107) terminated by signal 2
+  tsh> jobs
+  [1] (6106) Running myspin 8 &
+
+8. test08
+Input:
+  myspin 8 &
+  myspin 9
+  ctrl-z
+  jobs
+  ctrl-\
+
+Expected output:
+  tsh> myspin 8 &
+  [1] (6180) myspin 8 &
+  tsh> myspin 9
+  [2] Stopped     myspin 9
+
+  tsh> jobs
+  [1] (6180) Running myspin 8 &
+  [2] (6181) Stopped myspin 9
+  tsh> Terminating after receipt of SIGQUIT signal
+
+9. test09
+Input:
+  myspin 6 &
+  myspin 8
+  ctrl-z
+  jobs
+  bg %2
+  jobs
+
+Expected output:
+  tsh> myspin 6 &
+  [1] (6232) myspin 6 &
+  tsh> myspin 8
+  [2] Stopped     myspin 8
+
+  tsh> jobs
+  [2] (6233) Stopped myspin 8
+  tsh> bg %2
+  [2] (6233) myspin 8
+  tsh> jobs
+  [2] (6233) Running myspin 8
+
+10. test10
+Input:
+  myspin 8 &
+  fg %1
+  ctrl-z
+  jobs
+  fg %1
+  ctrl-c
+
+Expected output:
+  tsh> myspin 8 &
+  [1] (6360) myspin 8 &
+  tsh> fg %1
+  [1] Stopped     myspin 8 &
+
+  tsh> jobs
+  [1] (6360) Stopped myspin 8 &
+  tsh> fg %1
+  Job [1] (6360) terminated by signal 2
+  tsh>
+
+
+11. test11
+Input:
+  mysplit 6
+  ctrl-c
+  ps -f
+
+Expected output:
+  tsh> mysplit 8
+  Job [1] (6405) terminated by signal 2
+  tsh> ps -f
+  UID        PID  PPID  C STIME TTY          TIME CMD
+  glancast  6375  5186  0 21:57 pts/2    00:00:00 -bash
+  glancast  6402  6375  0 21:57 pts/2    00:00:00 tsh
+  glancast  6407  6402  0 21:57 pts/2    00:00:00 ps -f
+
+  (Note: There should not be a mysplit CMD now)
+
+12. test12
+Input:
+  mysplit 6
+  ctrl-z
+  jobs
+  ps -f
+  ctrl-\
+
+Expected output:
+  tsh> mysplit 6
+  [1] Stopped     mysplit 6
+
+  tsh> jobs
+  [1] (6479) Stopped mysplit 6
+  tsh> ps -f
+  UID        PID  PPID  C STIME TTY          TIME CMD
+  glancast  6441  5186  0 22:00 pts/2    00:00:00 -bash 
+  glancast  6468  6441  0 22:00 pts/2    00:00:00 tsh
+  glancast  6479  6468  0 22:02 pts/2    00:00:00 mysplit 6
+  glancast  6480  6479  0 22:02 pts/2    00:00:00 mysplit 6
+  glancast  6481  6468  0 22:02 pts/2    00:00:00 ps -f
+
+  tsh> Terminating after receipt of SIGQUIT signal
+
+  (Note: There should be 2 mysplit CMDs: parent+child )
+
+
+13. test13
+Input:
+  mysplit 6
+  ctrl-z
+  jobs
+  ps -f
+  fg %1
+  (wait till the foreground proc finishes)
+  ps -f
+
+Expected output:
+  tsh> mysplit 6 
+  [1] Stopped     mysplit 6 
+
+  tsh> jobs
+  [1] (6532) Stopped mysplit 6 
+  tsh> ps -f
+  UID        PID  PPID  C STIME TTY          TIME CMD
+  glancast  6496  5186  0 22:03 pts/2    00:00:00 -bash 
+  glancast  6523  6496  0 22:03 pts/2    00:00:00 tsh
+  glancast  6532  6523  0 22:05 pts/2    00:00:00 mysplit 6
+  glancast  6533  6532  0 22:05 pts/2    00:00:00 mysplit 6
+  glancast  6534  6523  0 22:05 pts/2    00:00:00 ps -f
+  tsh> fg %1
+  tsh> ps -f
+  UID        PID  PPID  C STIME TTY          TIME CMD
+  glancast  6496  5186  0 22:03 pts/2    00:00:00 -bash 
+  glancast  6523  6496  0 22:03 pts/2    00:00:00 tsh
+  glancast  6535  6523  0 22:06 pts/2    00:00:00 ps -f
+
+14. test14
+Input:
+  ./bogus
+  fg
+  bg
+  fg a
+  bg a
+  fg 9999999
+  bg 9999999
+  fg %1
+  bg %1
+  jobs
+
+Expected output:
+  tsh> ./bogus
+  ./bogus: Command not found
+  tsh> fg
+  fg command requires PID or %jobid argument
+  tsh> bg
+  bg command requires PID or %jobid argument
+  tsh> fg a
+  fg: argument must be a PID or %jobid
+  tsh> bg a
+  bg: argument must be a PID or %jobid
+  tsh> fg 9999999
+  (9999999): No such process
+  tsh> bg 9999999
+  (9999999): No such process
+  tsh> fg %1
+  %2: No such job
+  tsh> bg %1
+  %1: No such job
+  tsh> jobs
+  tsh> 
+
+
+15. test15
+Input:
+  myspin 10
+  ctrl-c
+  myspin 30 &
+  myspin 32 &
+  jobs
+  fg %1
+  ctrl-z
+  jobs
+  bg %3
+  bg %1
+  jobs
+  (wait for background jobs to finish)
+  quit
+  
+Expected output:
+  tsh> myspin 10
+  Job [1] (6781) terminated by signal 2
+  tsh> myspin 30 &
+  [1] (6782) myspin 30 &
+  tsh> myspin 32 &
+  [2] (6785) myspin 32 &
+  tsh> jobs
+  [1] (6782) Running myspin 30 &
+  [2] (6785) Running myspin 32 &
+  tsh> fg %1
+  [1] Stopped     myspin 30 &
+
+  tsh> jobs
+  [1] (6782) Stopped myspin 30 &
+  [2] (6785) Running myspin 32 &
+  tsh> bg %3
+  %3: No such job
+  tsh> bg %1
+  [1] (6782) myspin 30 &
+  tsh> jobs
+  [1] (6782) Running myspin 30 &
+  [2] (6785) Running myspin 32 &
+
+  tsh> quit
+
+
+16. test16
+Input:
+  ./mystop 2
+  (wait fo the process to stop itself)
+  jobs
+  ./myint 2
+  (wait for the process to interrupt itself)
+  jobs
+  fg %1
+  (process should terminate)
+  jobs
+  (shouldn't be any background jobs)
+  quit
+
+Expected output:
+  tsh> mystop 2
+  [1] Stopped     mystop 2
+
+  tsh> jobs
+  [1] (6863) Stopped mystop 2
+  tsh> myint 2
+  Job [2] (6864) terminated by signal 2
+  tsh> jobs
+  [1] (6863) Stopped mystop 2
+  tsh> fg %1
+  tsh> jobs
+  tsh> quit
+
+

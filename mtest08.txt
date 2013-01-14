@@ -1,0 +1,19 @@
+
+Input:
+  ./myspin 8 &
+  ./myspin 9
+  ctrl-z
+  jobs
+  ctrl-\
+
+Expected output:
+  tsh> ./myspin 8 &
+  [1] (6180) ./myspin 8 &
+  tsh> ./myspin 9
+  [2] Stopped     ./myspin 9
+
+  tsh> jobs
+  [1] (6180) Running ./myspin 8 &
+  [2] (6181) Stopped ./myspin 9
+  tsh> Terminating after receipt of SIGQUIT signal
+

@@ -1,0 +1,30 @@
+
+Input:
+  ./mysplit 6
+  ctrl-z
+  jobs
+  ps -f
+  fg %1
+  (wait till the foreground proc finishes)
+  ps -f
+
+Expected output:
+  tsh> ./mysplit 6 
+  [1] Stopped     ./mysplit 6 
+
+  tsh> jobs
+  [1] (6532) Stopped ./mysplit 6 
+  tsh> ps -f
+  UID        PID  PPID  C STIME TTY          TIME CMD
+  glancast  6496  5186  0 22:03 pts/2    00:00:00 -bash
+  glancast  6523  6496  0 22:03 pts/2    00:00:00 tsh
+  glancast  6532  6523  0 22:05 pts/2    00:00:00 ./mysplit 6
+  glancast  6533  6532  0 22:05 pts/2    00:00:00 ./mysplit 6
+  glancast  6534  6523  0 22:05 pts/2    00:00:00 ps -f
+  tsh> fg %1
+  tsh> ps -f
+  UID        PID  PPID  C STIME TTY          TIME CMD
+  glancast  6496  5186  0 22:03 pts/2    00:00:00 -bash
+  glancast  6523  6496  0 22:03 pts/2    00:00:00 tsh
+  glancast  6535  6523  0 22:06 pts/2    00:00:00 ps -f
+

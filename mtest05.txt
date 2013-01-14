@@ -1,0 +1,15 @@
+
+Input:
+  ./myspin 6 &
+  ./myspin 8 &
+  jobs
+
+Expected output:
+  tsh> ./myspin 6 &
+  [1] (5978) ./myspin 6 &
+  tsh> ./myspin 8 &
+  [2] (5981) ./myspin 8 &
+  tsh> jobs
+  [1] (5978) Running ./myspin 6 &
+  [2] (5981) Running ./myspin 8 &
+

@@ -1,0 +1,9 @@
+
+Input:
+  ./myspin 6
+  ctl-c
+
+Expected output:
+  tsh> ./myspin 6
+  Job [1] (6026) terminated by signal 2
+

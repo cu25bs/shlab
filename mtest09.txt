@@ -1,0 +1,22 @@
+
+Input:
+  ./myspin 6 &
+  ./myspin 8
+  ctrl-z
+  jobs
+  bg %2
+  jobs
+
+Expected output:
+  tsh> ./myspin 6 &
+  [1] (6232) ./myspin 6 &
+  tsh> ./myspin 8
+  [2] Stopped     ./myspin 8
+
+  tsh> jobs
+  [2] (6233) Stopped ./myspin 8
+  tsh> bg %2
+  [2] (6233) ./myspin 8
+  tsh> jobs
+  [2] (6233) Running ./myspin 8
+
