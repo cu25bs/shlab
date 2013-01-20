@@ -1,7 +1,8 @@
 /* 
  * tsh - A tiny shell program with job control
  * 
- * James Espinosa
+ * James Espinosa - [username]
+ * Matt Demali    - [username]
  *
  */
 
