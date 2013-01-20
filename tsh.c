@@ -197,6 +197,34 @@ int main(int argc, char **argv)
 */
 void eval(char *cmdline) 
 {
+    char *argv[MAXARGS];
+    char buf[MAXLINE];
+    int bg;
+    pid_t pid;
+    
+    strcpy(buf, cmdline);
+    bg = parseline(buf, argv);
+    
+    if (argv[0] == NULL)
+	return;   /* Ignore empty lines */
+    
+    if (!builtin_cmd(argv)) {
+	if ((pid = fork()) == 0) {	/* Child runs user job */
+	    if (execve(argv[0], argv, environ) > 0) {
+		printf("%s: Command not found. \n", argv[0]);
+		exit(0);
+	    }
+	}
+	
+	/* Parent waits for foreground job to terminate */
+	if (!bg) {
+	    int status;
+	    if (waitpid(pid, &status, 0) < 0)
+		unix_error("waitfg: waitpd error");
+	}
+	else
+	    printf("%d %s", pid, cmdline);
+    }
     return;
 }
 
@@ -263,6 +291,12 @@ int parseline(const char *cmdline, char **argv)
  */
 int builtin_cmd(char **argv) 
 {
+    if (!strcmp(argv[0], "quit")) /* Quit command */
+	exit(0);
+	
+    if (!strcmp(argv[0], "&"))	/* Ignore singleton & */
+	return 1;
+    
     return 0;     /* not a builtin command */
 }
 
