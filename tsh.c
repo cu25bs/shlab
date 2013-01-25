@@ -295,6 +295,7 @@ int builtin_cmd(char **argv)
 	exit(0);
 	
     if (!strcmp(argv[0], "jobs"))
+	listjobs(jobs);
 	return 1;
     
     if (!strcmp(argv[0], "fg") || !strcmp(argv[0], "bg"))

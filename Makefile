@@ -6,7 +6,7 @@ TSH = ./tsh
 TSHREF = ./tshref
 
 CC = gcc
-CFLAGS = -Wall -O2
+CFLAGS = -Wall -g
 FILES = $(TSH) ./myspin ./mysplit ./mystop ./myint
 
 all: $(FILES)
