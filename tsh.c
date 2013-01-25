@@ -294,12 +294,15 @@ int builtin_cmd(char **argv)
     if (!strcmp(argv[0], "quit"))
 	exit(0);
 	
-    if (!strcmp(argv[0], "jobs"))
+    if (!strcmp(argv[0], "jobs")) {
 	listjobs(jobs);
 	return 1;
+    }
     
-    if (!strcmp(argv[0], "fg") || !strcmp(argv[0], "bg"))
+    if (!strcmp(argv[0], "fg") || !strcmp(argv[0], "bg")) {
+	do_bgfg(argv);
 	return 1;
+    }
 	
     if (!strcmp(argv[0], "&"))	/* Ignore singleton & */
 	return 1;
