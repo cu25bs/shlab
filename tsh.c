@@ -315,6 +315,16 @@ int builtin_cmd(char **argv)
  */
 void do_bgfg(char **argv) 
 {
+    if (argv[1] != NULL) {     /* incorrect argument types? */
+	
+	if (!isdigit(*argv[1]))
+	    printf("%s: argument must be a PID or %%jobid\n", argv[0]);
+	
+    } else {
+	printf("%s command requires PID or %%jobid argument\n", argv[0]);
+	return;
+    }
+    
     return;
 }
 
