@@ -315,9 +315,24 @@ int builtin_cmd(char **argv)
  */
 void do_bgfg(char **argv) 
 {
-    if (argv[1] != NULL) {     /* incorrect argument types? */
+    int jid;
+    char *args = argv[1];
+    struct job_t *job;
+    
+    if (args != NULL) {     /* if arguments are passed to bg or fg */
 	
-	if (!isdigit(*argv[1]))
+	if (args[0] == '%') {	/* check for job id */
+	    
+	    jid = atoi(&args[1]);
+	    
+	    if (!(job = getjobjid(jobs, jid))) {
+		printf("%s: No such job\n", args);
+		return;
+	    }
+	    
+	}
+	
+	if (!isdigit(*args))
 	    printf("%s: argument must be a PID or %%jobid\n", argv[0]);
 	
     } else {
