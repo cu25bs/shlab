@@ -220,7 +220,7 @@ void eval(char *cmdline)
 	if (!bg) {
 	    int status;
 	    if (waitpid(pid, &status, 0) < 0)
-		unix_error("waitfg: waitpd error");
+		unix_error("waitfg: waitpid error");
 	}
 	else
 	    printf("%d %s", pid, cmdline);
