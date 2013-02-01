@@ -201,6 +201,7 @@ void eval(char *cmdline)
     char buf[MAXLINE];
     int bg;
     pid_t pid;
+    sigset_t mask;
     
     strcpy(buf, cmdline);
     bg = parseline(buf, argv);
@@ -209,7 +210,17 @@ void eval(char *cmdline)
 	return;   /* Ignore empty lines */
     
     if (!builtin_cmd(argv)) {		 /* If user input is not a built in command, fork() */
+	
+	/* Parent blocks SIGCHLD signal temporarily */
+	sigemptyset(&mask);
+	sigaddset(&mask, SIGCHLD);
+	sigprocmask(SIG_BLOCK, &mask, 0);
+	
 	if ((pid = fork()) == 0) {	/* Child runs user job */
+	    
+	    setpgid(0,0);	/* Change child process group id */
+	    sigprocmask(SIG_UNBLOCK, &mask, 0);		/* Child unblocks SIGCHLD signal */
+	    
 	    if (execvp(argv[0], argv) < 0) {
 		printf("%s: Command not found. \n", argv[0]);
 		exit(0);
@@ -218,11 +229,11 @@ void eval(char *cmdline)
 	
 	/* Parent waits for foreground job to terminate */
 	if (!bg) {
-	    int status;
-	    if (waitpid(pid, &status, 0) < 0)
-		unix_error("waitfg: waitpid error");
+	    waitfg(pid);
+	    return;
 	}
 	else
+	    sigprocmask(SIG_UNBLOCK, &mask, 0);		/* Parent unblocks SIGCHLD */
 	    printf("%d %s", pid, cmdline);
     }
     return;
