@@ -443,7 +443,7 @@ void waitfg(pid_t pid)
  */
 void sigchld_handler(int sig) 
 {
-    int status; 
+    int status;
     pid_t pid;
   
     while ((pid = waitpid(-1, &status, WNOHANG | WUNTRACED)) > 0 ) {
@@ -459,6 +459,7 @@ void sigchld_handler(int sig)
 
 	if (WIFSTOPPED(status)) {     /*checks if child process that caused return is currently stopped */
 	    getjobpid(jobs, pid)->state = ST;
+	    //printf("[%d] Stopped %s\n", pid2jid(pid), jobs->cmdline);
 	    printf("signal that caused child to stop: %d\n", WSTOPSIG(status));    /*prints number of signal that cause child to stop  */
 
 	}
