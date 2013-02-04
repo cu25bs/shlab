@@ -321,7 +321,7 @@ int builtin_cmd(char **argv)
 	}
 	
 	if (stopped == 1) {
-	    printf("There are stopped jobs that exist.\n");
+	    printf("There are stopped jobs\n");
 	    return 1;
 	
 	} else {
