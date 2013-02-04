@@ -233,10 +233,12 @@ void eval(char *cmdline)
 	    
 	} else {
 	    /* Parent waits for foreground job to terminate */
-	    if (bg == 1)
+	    if (bg == 1) {
 		addjob(jobs, pid, BG, cmdline);		/* If bg, add job to job list as bg */
-	    else
+		printf("[%d] (%d) %s", pid2jid(pid), pid, cmdline);
+	    } else {
 		addjob(jobs, pid, FG, cmdline);		/* If !bg, add job to job list as fg */
+	    }
 		
 	    sigprocmask(SIG_UNBLOCK, &mask, 0);		/* Parent unblocks SIGCHLD */
 	    waitfg(pid);
