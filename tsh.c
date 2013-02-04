@@ -386,6 +386,30 @@ void do_bgfg(char **argv)
 	return;
     }
     
+    if (job != NULL) {
+	pid = job->pid;
+	
+	if (job->state == ST) {
+	    if (!strcmp(argv[0], "bg")) {
+		job->state = BG;
+		kill(-pid, SIGCONT);
+	    }
+	    
+	    if (!strcmp(argv[0], "fg")) {
+		job->state = FG;
+		kill(-pid, SIGCONT);
+		waitfg(job->pid);
+	    }
+	}
+	
+	if (job->state == BG) {
+	    if (!strcmp(argv[0], "fg")) {
+		job->state = FG;
+		waitfg(job->pid);
+	    }
+	}
+    }
+    
     return;
 }
 
