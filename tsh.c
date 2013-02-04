@@ -391,6 +391,7 @@ void do_bgfg(char **argv)
 	
 	if (job->state == ST) {
 	    if (!strcmp(argv[0], "bg")) {
+		printf("[%d] (%d) %s", job->jid, job->pid, job->cmdline);
 		job->state = BG;
 		kill(-pid, SIGCONT);
 	    }
@@ -459,9 +460,7 @@ void sigchld_handler(int sig)
 
 	if (WIFSTOPPED(status)) {     /*checks if child process that caused return is currently stopped */
 	    getjobpid(jobs, pid)->state = ST;
-	    //printf("[%d] Stopped %s\n", pid2jid(pid), jobs->cmdline);
-	    printf("signal that caused child to stop: %d\n", WSTOPSIG(status));    /*prints number of signal that cause child to stop  */
-
+	    printf("[%d] Stopped %s\n", pid2jid(pid), jobs->cmdline);
 	}
     }
     
