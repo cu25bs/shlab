@@ -454,8 +454,8 @@ void sigchld_handler(int sig)
 	}
 
 	if (WIFSIGNALED(status)) {  /*checks if child was terminated by a signal that was not caught */
-	    deletejob(jobs,pid);
 	    printf("Job [%d] (%d) terminated by signal %d\n", pid2jid(pid), pid, WTERMSIG(status));
+	    deletejob(jobs,pid);
 	}
 
 	if (WIFSTOPPED(status)) {     /*checks if child process that caused return is currently stopped */
